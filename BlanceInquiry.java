@@ -1,9 +1,9 @@
 import org.brotli.dec.BrotliInputStream;
+import org.json.Cookie;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,33 +14,36 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.concurrent.TimeUnit;
 import java.util.zip.GZIPInputStream;
 
 public class BlanceInquiry {
     private static final String CONFIG_FILE = "config.txt";
+
     public static void main(String[] args) {
-        if(isConfigIncomplete()){
-            CredentialsDialog();//加载或创建配置文件
-        }else {
-            displayBalanceMessages();
-            if(BiliVideoProfit() == null||BiliShopmallBalance()==null){
-                JOptionPane.showMessageDialog(null, "登录Cookie过期","Cookie过期", JOptionPane.ERROR_MESSAGE);
-                CredentialsDialog();
-            }
-            else if(BiliVideoUnsettledProfit()==null){
-                JOptionPane.showMessageDialog(null, "激励Cookie过期","Cookie过期", JOptionPane.ERROR_MESSAGE);
-                CredentialsDialog();
-            }
-            else if(BiliShopmallUnsettledProfit()==null){
-                JOptionPane.showMessageDialog(null, "工房Cookie过期","Cookie过期", JOptionPane.ERROR_MESSAGE);
-                CredentialsDialog();
-            }
-            else if(BalanceEnquiry172()==null){
-                JOptionPane.showMessageDialog(null, "172号Token过期","Token过期", JOptionPane.ERROR_MESSAGE);
-                CredentialsDialog();
-            }
-        }
+
+                 if(isConfigIncomplete()) {
+                CredentialsDialog();//加载或创建配置文件
+                 }
+                 else if((BiliVideoProfit() != null || BiliShopmallBalance() != null)&&BiliVideoUnsettledProfit() != null&&BiliShopmallUnsettledProfit() != null&&BalanceEnquiry172() != null) {
+                displayBalanceMessages();
+                 }
+                 else if (BiliVideoProfit() == null || BiliShopmallBalance() == null) {
+                    JOptionPane.showMessageDialog(null, "登录Cookie过期或不可用", "Cookie", JOptionPane.ERROR_MESSAGE);
+                    CredentialsDialog();
+                }
+                else if (BiliVideoUnsettledProfit() == null) {
+                    JOptionPane.showMessageDialog(null, "激励Cookie过期或不可用", "Cookie", JOptionPane.ERROR_MESSAGE);
+                    CredentialsDialog();
+                }
+                else if (BiliShopmallUnsettledProfit() == null) {
+                    JOptionPane.showMessageDialog(null, "工房Cookie过期或不可用", "Cookie", JOptionPane.ERROR_MESSAGE);
+                    CredentialsDialog();
+                }
+                else if (BalanceEnquiry172() == null) {
+                    JOptionPane.showMessageDialog(null, "172号Token过期或不可用", "Token", JOptionPane.ERROR_MESSAGE);
+                    CredentialsDialog();
+                }
+
 
 
 
@@ -66,7 +69,7 @@ public class BlanceInquiry {
             frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             ImageIcon icon = new ImageIcon("resource//IMG\\收益.png");
             frame.setIconImage(icon.getImage());//给窗体设置图标方法
-            frame.setSize(400, 200);
+            frame.setSize(440, 180);
             frame.setLocationRelativeTo(null); // 窗口居中
 
             // 创建一个面板来容纳所有的信息
@@ -129,6 +132,7 @@ public class BlanceInquiry {
             // 显示frame
             frame.setVisible(true);
         });
+
     }
     //贝壳查询
     private static BigDecimal BiliVideoProfit() {
@@ -407,7 +411,7 @@ public class BlanceInquiry {
         public static void CredentialsDialog() {
             JFrame frame = new JFrame("修改cookie");//设置窗口的title
             //frame.setResizable(false); //设置窗口不可调整大小
-            frame.setSize(360, 320); // 设置窗口的初始大小
+            frame.setMinimumSize(new Dimension(380, 320)); // 设置窗口的最小尺寸
             ImageIcon icon = new ImageIcon("resource//IMG\\Cookie.png");
             frame.setIconImage(icon.getImage());//给窗体设置图标方法
 
@@ -443,13 +447,28 @@ public class BlanceInquiry {
             buttonSave.setForeground(Color.WHITE); // 白色文字
             buttonSave.setFont(new Font("微软雅黑", Font.BOLD, 18));
             buttonSave.addActionListener(new ActionListener() {
+
                 public void actionPerformed(ActionEvent e) {
                     String Cookie=textFieldCookie.getText().trim();
                     String Cookie1=textFieldCookie1.getText().trim();
                     String Cookie2=textFieldCookie2.getText().trim();
                     String Token=textFieldToken.getText().trim();
 
-                    saveConfig(Cookie, Cookie1,Cookie2,Token);
+                    if (BiliVideoProfit() == null || BiliShopmallBalance() == null) {
+                        saveConfig(Cookie, getConfig("激励Cookie"),getConfig("工房Cookie"),getConfig("172号Token"));
+                    }
+                    else if (BiliVideoUnsettledProfit() == null) {
+                        saveConfig(getConfig("登录Cookie"), Cookie1,getConfig("工房Cookie"),getConfig("172号Token"));
+                    }
+                    else if (BiliShopmallUnsettledProfit() == null) {
+                        saveConfig(getConfig("登录Cookie"), getConfig("激励Cookie"),Cookie2,getConfig("172号Token"));
+                    }
+                    else if (BalanceEnquiry172() == null) {
+                        saveConfig(getConfig("登录Cookie"), getConfig("激励Cookie"),getConfig("工房Cookie"),Token);
+                    }else{
+                        saveConfig(Cookie, Cookie1,Cookie2,Token);
+                    }
+
                     JOptionPane.showMessageDialog(null, "保存配置成功！");
                     frame.dispose();
 
@@ -500,12 +519,21 @@ public class BlanceInquiry {
                 }
 
 
+
     private static boolean isConfigIncomplete() {
         try {
             String content = Files.readString(Paths.get(CONFIG_FILE), StandardCharsets.UTF_8);
-            return !content.contains("登录Cookie=") || !content.contains("激励Cookie=") || !content.contains("工房Cookie=")|| !content.contains("172号Token");
+
+            // 分别检查每个配置项
+            boolean loginCookieIncomplete = !content.contains("登录Cookie=") || content.indexOf("登录Cookie=") >= content.indexOf("\n", content.indexOf("登录Cookie="));
+            boolean incentiveCookieIncomplete = !content.contains("激励Cookie=") || content.indexOf("激励Cookie=") >= content.indexOf("\n", content.indexOf("激励Cookie="));
+            boolean workshopCookieIncomplete = !content.contains("工房Cookie=") || content.indexOf("工房Cookie=") >= content.indexOf("\n", content.indexOf("工房Cookie="));
+            boolean tokenIncomplete = !content.contains("172号Token=") || content.indexOf("172号Token=") >= content.indexOf("\n", content.indexOf("172号Token="));
+
+            // 如果任何一个配置项不完整，返回true
+            return loginCookieIncomplete || incentiveCookieIncomplete || workshopCookieIncomplete || tokenIncomplete;
         } catch (IOException e) {
-            return true;
+            return true;  // 发生IO异常，认为配置文件读取失败，返回true
         }
     }
 
@@ -528,6 +556,7 @@ public class BlanceInquiry {
                     return line.substring(key.length() + 1);
                 }
             }
+
         } catch (IOException e) {
             e.printStackTrace();
         }

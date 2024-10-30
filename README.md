@@ -9,6 +9,7 @@
 1.解压缩
 
 2.打开收益查询.exe
+
 ![UI](https://github.com/user-attachments/assets/34930a7f-5717-4ec8-9870-76f71e7397d0)
 
 3.输入对应的cookie或Token后点击“保存”，会自动弹出收益提醒

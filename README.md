@@ -14,7 +14,9 @@
 
 3.输入对应的cookie或Token后点击“保存”，会自动弹出收益提醒
 
-依次为：
+![收益](https://github.com/user-attachments/assets/8585d879-55ae-4f15-9dfc-0d9a54415bf4)
+
+Cookie和Token依次为：
 
 https://member.bilibili.com/platform/allowance/withdraw
 ![Cookie1](https://github.com/user-attachments/assets/51906caf-8ad1-46c7-895b-052ab069d2b0)

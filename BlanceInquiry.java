@@ -20,30 +20,39 @@ public class BlanceInquiry {
     private static final String CONFIG_FILE = "config.txt";
 
     public static void main(String[] args) {
-
                  if(isConfigIncomplete()) {
-                CredentialsDialog();//加载或创建配置文件
+                     CredentialsDialog();//加载或创建配置文件
                  }
-                 else if((BiliVideoProfit() != null || BiliShopmallBalance() != null)&&BiliVideoUnsettledProfit() != null&&BiliShopmallUnsettledProfit() != null&&BalanceEnquiry172() != null) {
-                displayBalanceMessages();
+                 else if (BiliVideoProfit() == null&&BiliShopmallUnsettledProfit() != null&&BalanceEnquiry172() != null) {
+                     JOptionPane.showMessageDialog(null, "登录Cookie过期或不可用，请修改", "Cookie&Token", JOptionPane.ERROR_MESSAGE);
+                     CredentialsDialog();
                  }
-                 else if (BiliVideoProfit() == null || BiliShopmallBalance() == null) {
-                    JOptionPane.showMessageDialog(null, "登录Cookie过期或不可用", "Cookie", JOptionPane.ERROR_MESSAGE);
-                    CredentialsDialog();
-                }
-                else if (BiliVideoUnsettledProfit() == null) {
-                    JOptionPane.showMessageDialog(null, "激励Cookie过期或不可用", "Cookie", JOptionPane.ERROR_MESSAGE);
-                    CredentialsDialog();
-                }
-                else if (BiliShopmallUnsettledProfit() == null) {
-                    JOptionPane.showMessageDialog(null, "工房Cookie过期或不可用", "Cookie", JOptionPane.ERROR_MESSAGE);
-                    CredentialsDialog();
-                }
-                else if (BalanceEnquiry172() == null) {
-                    JOptionPane.showMessageDialog(null, "172号Token过期或不可用", "Token", JOptionPane.ERROR_MESSAGE);
-                    CredentialsDialog();
-                }
-
+                 else if (BiliVideoProfit() != null&&BiliShopmallUnsettledProfit() == null&&BalanceEnquiry172() != null) {
+                     JOptionPane.showMessageDialog(null, "工房Cookie过期或不可用，请修改", "Cookie&Token", JOptionPane.ERROR_MESSAGE);
+                     CredentialsDialog();
+                 }
+                 else if (BiliVideoProfit() != null&&BiliShopmallUnsettledProfit() != null&&BalanceEnquiry172() == null) {
+                     JOptionPane.showMessageDialog(null, "172号Token过期或不可用，请修改", "Cookie&Token", JOptionPane.ERROR_MESSAGE);
+                     CredentialsDialog();
+                 }
+                 else if (BiliVideoProfit() == null&&BiliShopmallUnsettledProfit() == null&&BalanceEnquiry172() != null) {
+                     JOptionPane.showMessageDialog(null, "登录Cookie和工房Cookie过期或不可用，请修改", "Cookie&Token", JOptionPane.ERROR_MESSAGE);
+                     CredentialsDialog();
+                 }
+                 else if (BiliVideoProfit() == null&&BiliShopmallUnsettledProfit() != null&&BalanceEnquiry172() == null) {
+                     JOptionPane.showMessageDialog(null, "登录Cookie和172号Token过期或不可用，请修改", "Cookie&Token", JOptionPane.ERROR_MESSAGE);
+                     CredentialsDialog();
+                 }
+                 else if (BiliVideoProfit() != null&&BiliShopmallUnsettledProfit() == null&&BalanceEnquiry172() == null) {
+                     JOptionPane.showMessageDialog(null, "工房Cookie和172号Token过期或不可用，请修改", "Cookie&Token", JOptionPane.ERROR_MESSAGE);
+                     CredentialsDialog();
+                 }
+                 else if (BiliVideoProfit() == null&&BiliShopmallUnsettledProfit() == null&&BalanceEnquiry172() == null){
+                     JOptionPane.showMessageDialog(null, "所有Cookie和Token过期或不可用，请修改", "", JOptionPane.ERROR_MESSAGE);
+                     CredentialsDialog();
+                 }else {
+                     displayBalanceMessages();
+                 }
 
 
 
@@ -69,7 +78,7 @@ public class BlanceInquiry {
             frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             ImageIcon icon = new ImageIcon("resource//IMG\\收益.png");
             frame.setIconImage(icon.getImage());//给窗体设置图标方法
-            frame.setSize(440, 180);
+            frame.setSize(460, 200);
             frame.setLocationRelativeTo(null); // 窗口居中
 
             // 创建一个面板来容纳所有的信息
@@ -193,7 +202,7 @@ public class BlanceInquiry {
     //未结算的贝壳
     private static BigDecimal BiliVideoUnsettledProfit() {
         String urlString = "https://api.bilibili.com/studio/growup/web/up/wallet/summary?s_locale=zh_CN";
-        String cookie1 = getConfig("激励Cookie");
+        String cookie1 = getConfig("登录Cookie");
         try {
             URL url = new URL(urlString);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -409,9 +418,9 @@ public class BlanceInquiry {
 
 
         public static void CredentialsDialog() {
-            JFrame frame = new JFrame("修改cookie");//设置窗口的title
+            JFrame frame = new JFrame("Cookie&Token");//设置窗口的title
             //frame.setResizable(false); //设置窗口不可调整大小
-            frame.setMinimumSize(new Dimension(380, 320)); // 设置窗口的最小尺寸
+            frame.setMinimumSize(new Dimension(380, 280)); // 设置窗口的最小尺寸
             ImageIcon icon = new ImageIcon("resource//IMG\\Cookie.png");
             frame.setIconImage(icon.getImage());//给窗体设置图标方法
 
@@ -419,15 +428,8 @@ public class BlanceInquiry {
             frame.setLocationRelativeTo(null);//居中定位
 
             JPanel panel = new JPanel();
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-
-            JLabel labelCookie = new JLabel("登录Cookie:");
-            JTextField textFieldCookie = new JTextField(10);
-            textFieldCookie.setPreferredSize(new Dimension(70, 25));
-            textFieldCookie.setFont(new Font("微软雅黑", Font.BOLD, 20));
-
-            JLabel labelCookie1 = new JLabel("激励Cookie:");
+            JLabel labelCookie1 = new JLabel("登录Cookie:");
             JTextField textFieldCookie1 = new JTextField(10);
             textFieldCookie1.setPreferredSize(new Dimension(70, 25));
             textFieldCookie1.setFont(new Font("微软雅黑", Font.BOLD, 20));
@@ -449,41 +451,38 @@ public class BlanceInquiry {
             buttonSave.addActionListener(new ActionListener() {
 
                 public void actionPerformed(ActionEvent e) {
-                    String Cookie=textFieldCookie.getText().trim();
                     String Cookie1=textFieldCookie1.getText().trim();
                     String Cookie2=textFieldCookie2.getText().trim();
                     String Token=textFieldToken.getText().trim();
 
-                    if (BiliVideoProfit() == null || BiliShopmallBalance() == null) {
-                        saveConfig(Cookie, getConfig("激励Cookie"),getConfig("工房Cookie"),getConfig("172号Token"));
+                    if (BiliVideoProfit() == null&&BiliShopmallUnsettledProfit() != null&&BalanceEnquiry172() != null) {
+                        saveConfig(Cookie1,getConfig("工房Cookie"),getConfig("172号Token"));
                     }
-                    else if (BiliVideoUnsettledProfit() == null) {
-                        saveConfig(getConfig("登录Cookie"), Cookie1,getConfig("工房Cookie"),getConfig("172号Token"));
+                    else if (BiliVideoProfit() != null&&BiliShopmallUnsettledProfit() == null&&BalanceEnquiry172() != null) {
+                        saveConfig(getConfig("登录Cookie"),Cookie2,getConfig("172号Token"));
                     }
-                    else if (BiliShopmallUnsettledProfit() == null) {
-                        saveConfig(getConfig("登录Cookie"), getConfig("激励Cookie"),Cookie2,getConfig("172号Token"));
+                    else if (BiliVideoProfit() != null&&BiliShopmallUnsettledProfit() != null&&BalanceEnquiry172() == null) {
+                        saveConfig(getConfig("登录Cookie"),getConfig("工房Cookie"),Token);
                     }
-                    else if (BalanceEnquiry172() == null) {
-                        saveConfig(getConfig("登录Cookie"), getConfig("激励Cookie"),getConfig("工房Cookie"),Token);
-                    }else{
-                        saveConfig(Cookie, Cookie1,Cookie2,Token);
+                    else if (BiliVideoProfit() == null&&BiliShopmallUnsettledProfit() == null&&BalanceEnquiry172() != null) {
+                        saveConfig(Cookie1,Cookie2,getConfig("172号Token"));
+                    }
+                    else if (BiliVideoProfit() == null&&BiliShopmallUnsettledProfit() != null&&BalanceEnquiry172() == null) {
+                        saveConfig(Cookie1,getConfig("工房Cookie"),Token);
+                    }
+                    else if (BiliVideoProfit() != null&&BiliShopmallUnsettledProfit() == null&&BalanceEnquiry172() == null) {
+                        saveConfig(getConfig("登录Cookie"),Cookie2,Token);
+                    }
+                   else if (BiliVideoProfit() == null&&BiliShopmallUnsettledProfit() == null&&BalanceEnquiry172() == null){
+                        saveConfig( Cookie1,Cookie2,Token);
                     }
 
                     JOptionPane.showMessageDialog(null, "保存配置成功！");
                     frame.dispose();
+                    displayBalanceMessages();
 
                 }
             });
-
-                    panel.add(labelCookie);
-
-                    panel.add(Box.createHorizontalStrut(0));
-                    panel.add(Box.createVerticalStrut(50));
-
-                    panel.add(textFieldCookie);
-
-                    panel.add(Box.createHorizontalStrut(0));
-                    panel.add(Box.createVerticalStrut(50));
 
                     panel.add(labelCookie1);
 
@@ -511,6 +510,7 @@ public class BlanceInquiry {
                     panel.add(Box.createVerticalStrut(50));
 
                     panel.add(buttonSave);
+                    panel.add(Box.createVerticalStrut(60));
 
 
 
@@ -526,20 +526,19 @@ public class BlanceInquiry {
 
             // 分别检查每个配置项
             boolean loginCookieIncomplete = !content.contains("登录Cookie=") || content.indexOf("登录Cookie=") >= content.indexOf("\n", content.indexOf("登录Cookie="));
-            boolean incentiveCookieIncomplete = !content.contains("激励Cookie=") || content.indexOf("激励Cookie=") >= content.indexOf("\n", content.indexOf("激励Cookie="));
             boolean workshopCookieIncomplete = !content.contains("工房Cookie=") || content.indexOf("工房Cookie=") >= content.indexOf("\n", content.indexOf("工房Cookie="));
             boolean tokenIncomplete = !content.contains("172号Token=") || content.indexOf("172号Token=") >= content.indexOf("\n", content.indexOf("172号Token="));
 
             // 如果任何一个配置项不完整，返回true
-            return loginCookieIncomplete || incentiveCookieIncomplete || workshopCookieIncomplete || tokenIncomplete;
+            return loginCookieIncomplete || workshopCookieIncomplete || tokenIncomplete;
         } catch (IOException e) {
             return true;  // 发生IO异常，认为配置文件读取失败，返回true
         }
     }
 
     //保存创建的config.txt配置文件，获取填写在面板的信息并写入文件
-    private static void saveConfig(String Cookie, String Cookie1,String Cookie2,String Token) {
-        String content = String.format("登录Cookie=%s\n激励Cookie=%s\n工房Cookie=%s\n172号Token=%s\n", Cookie, Cookie1, Cookie2,Token);
+    private static void saveConfig(String Cookie1,String Cookie2,String Token) {
+        String content = String.format("登录Cookie=%s\n工房Cookie=%s\n172号Token=%s\n", Cookie1, Cookie2,Token);
         try {
             Files.writeString(Paths.get(CONFIG_FILE), content, StandardCharsets.UTF_8);
         } catch (IOException e) {

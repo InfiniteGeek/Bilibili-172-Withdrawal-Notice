@@ -10,14 +10,17 @@
 
 2.打开收益查询.exe
 
-3.输入对应的cookie或Token
+![UI](https://github.com/user-attachments/assets/34930a7f-5717-4ec8-9870-76f71e7397d0)
 
-依次为：https://www.bilibili.com/
+3.输入对应的cookie或Token后点击“保存”，会自动弹出收益提醒
+
+![收益](https://github.com/user-attachments/assets/8585d879-55ae-4f15-9dfc-0d9a54415bf4)
+
+Cookie和Token依次为：
 
 https://member.bilibili.com/platform/allowance/withdraw
+![Cookie1](https://github.com/user-attachments/assets/51906caf-8ad1-46c7-895b-052ab069d2b0)
 
-https://mall.bilibili.com/mall-up-c/shop/settle/query
-
-（仅有这项需要通过小蓝鸟抓包获取，其余都可从浏览器获取）
+https://mall.bilibili.com/mall-up-c/shop/settle/query（工房需要通过手机的小蓝鸟抓包获取，其余都可从浏览器f12获取）
 
 https://haoka.lot-ml.com/view/iframe.html

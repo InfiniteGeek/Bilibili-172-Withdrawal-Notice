@@ -9,15 +9,12 @@
 ---
 
 食用方法：
-安装java18.0.2及以上版本的环境，或下载“release”中的java18.0.2，与收益查询.exe在相同目录
 
-1.解压缩
-
-2.打开收益查询.exe
+1.下载并安装
 
 ![UI](https://github.com/user-attachments/assets/34930a7f-5717-4ec8-9870-76f71e7397d0)
 
-3.输入对应的cookie或Token后点击“保存”，会自动弹出收益提醒
+2.输入对应的cookie或Token后点击“保存”，会自动弹出收益提醒
 
 ![收益](https://github.com/user-attachments/assets/8585d879-55ae-4f15-9dfc-0d9a54415bf4)
 

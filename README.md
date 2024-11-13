@@ -12,7 +12,7 @@
 
 1.下载并安装
 
-![UI](https://github.com/user-attachments/assets/34930a7f-5717-4ec8-9870-76f71e7397d0)
+![PixPin_2024-11-13_14-32-40](https://cdn.jsdelivr.net/gh/InfiniteGeek/Picture/bilibili/PixPin_2024-11-13_14-32-40.png)
 
 2.输入对应的cookie或Token后点击“保存”，会自动弹出收益提醒
 
@@ -20,9 +20,12 @@
 
 Cookie和Token依次为：
 
-https://member.bilibili.com/platform/allowance/withdraw
-![Cookie1](https://github.com/user-attachments/assets/51906caf-8ad1-46c7-895b-052ab069d2b0)
+工房Cookie：需要通过小蓝鸟抓包获得
 
-https://mall.bilibili.com/mall-up-c/shop/settle/query（工房余额和待结算需要通过手机的小蓝鸟抓包获取，其余都可从浏览器f12获取）
+![1](https://cdn.jsdelivr.net/gh/InfiniteGeek/Picture/bilibili/1.png)
+
+Token为172号卡的`Authorization`:
 
 https://haoka.lot-ml.com/view/iframe.html
+
+![PixPin_2024-11-13_14-43-23](https://cdn.jsdelivr.net/gh/InfiniteGeek/Picture/bilibili/PixPin_2024-11-13_14-43-23.png)
